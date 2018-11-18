@@ -76,8 +76,8 @@ function startGame(){
         letters[i].className = "m-1 border border-primary display-4 text-center";
         letters[i].style.maxWidth = '55px';
         letters[i].style.minWidth = '55px';
-        letters[i].style.minHeight = '67px';
-        letters[i].style.maxHeight = '67px';
+        letters[i].style.minHeight = '70px';
+        letters[i].style.maxHeight = '70px';
         answer.appendChild(letters[i]);
     }
 
@@ -103,10 +103,12 @@ function clickButton(e){
 
     //ПРОВЕРЯЕМ, НЕ ПРОИГРАЛИ ЛИ МЫ УЖЕ
     if (wrongAnswersLeft === 0){
-        alert(`ПОТРАЧЕНО! Правильный ответ - ${viselica[index].answer}`);
         for (let i=1; i < buttons.length; i++){
             buttons[i].disabled = true;
         }
+        drawAnswer();
+        setTimeout(looseAlert, 100);
+        return;
     }
 
     //ПРОВЕРЯМ, НЕ ПОБЕДИЛИ ЛИ МЫ УЖЕ
@@ -117,17 +119,18 @@ function clickButton(e){
         }
     }
     if (numberOfCorrectChars === viselica[index].answer.length){
-        alert("ПОБЕДА");
         for (let i=1; i < buttons.length; i++){
             buttons[i].disabled = true;
         }
+        drawAnswer();
+        setTimeout(winAlert, 100);
+        return;
     }
     
 }
 
 
 function drawViselica(wrongAnswersLeft){
-    console.log(wrongAnswersLeft);
     switch (wrongAnswersLeft) {
         case 7: drawing.src = "img/0.png"; break;
         case 6: drawing.src = "img/1.png"; break;
@@ -140,4 +143,21 @@ function drawViselica(wrongAnswersLeft){
         default: drawing.src = ""; break;
     }
 
+}
+
+function looseAlert(){
+    alert(`ПОТРАЧЕНО! Правильный ответ - ${viselica[index].answer}`);
+}
+
+function winAlert(){
+    alert("ПОБЕДА");
+}
+
+function drawAnswer(){
+    for (let i = 0; i < viselica[index].answer.length; i++){
+        const p = document.getElementById(`div${i}`);
+        if (p.innerHTML.length === 0){
+            p.innerHTML = viselica[index].answer[i]
+        }
+    }
 }
